@@ -60,6 +60,8 @@ import com.android.settingslib.graph.RLandscapeBatteryDrawableStyleA;
 import com.android.settingslib.graph.LandscapeBatteryDrawableStyleA;
 import com.android.settingslib.graph.RLandscapeBatteryDrawableStyleB;
 import com.android.settingslib.graph.LandscapeBatteryDrawableStyleB;
+import com.android.settingslib.graph.LandscapeBatteryDrawableiOS15;
+import com.android.settingslib.graph.LandscapeBatteryDrawableiOS16;
 import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.settings.CurrentUserTracker;
@@ -94,13 +96,15 @@ public class BatteryMeterView extends LinearLayout implements
     private static final int BATTERY_STYLE_LANDSCAPE_STYLE_A = 4;
     private static final int BATTERY_STYLE_RLANDSCAPE_STYLE_B = 5;
     private static final int BATTERY_STYLE_LANDSCAPE_STYLE_B = 6;
-    private static final int BATTERY_STYLE_CIRCLE = 7;
-    private static final int BATTERY_STYLE_DOTTED_CIRCLE = 8;
-    private static final int BATTERY_STYLE_FULL_CIRCLE = 9;
-    private static final int BATTERY_STYLE_TEXT = 10; /*hidden icon*/
-    private static final int BATTERY_STYLE_HIDDEN = 11;
-    private static final int BATTERY_STYLE_BIG_CIRCLE = 12;
-    private static final int BATTERY_STYLE_BIG_DOTTED_CIRCLE = 13;
+    private static final int BATTERY_STYLE_LANDSCAPE_iOS_15 = 7;
+    private static final int BATTERY_STYLE_LANDSCAPE_iOS_16 = 8;
+    private static final int BATTERY_STYLE_CIRCLE = 9;
+    private static final int BATTERY_STYLE_DOTTED_CIRCLE = 10;
+    private static final int BATTERY_STYLE_FULL_CIRCLE = 11;
+    private static final int BATTERY_STYLE_TEXT = 12; /*hidden icon*/
+    private static final int BATTERY_STYLE_HIDDEN = 13;
+    private static final int BATTERY_STYLE_BIG_CIRCLE = 14;
+    private static final int BATTERY_STYLE_BIG_DOTTED_CIRCLE = 15;
 
     private static final int BATTERY_PERCENT_HIDDEN = 0;
     private static final int BATTERY_PERCENT_SHOW_INSIDE = 1;
@@ -115,6 +119,8 @@ public class BatteryMeterView extends LinearLayout implements
     private final LandscapeBatteryDrawableStyleA mLandscapeDrawableStyleA;
     private final RLandscapeBatteryDrawableStyleB mRLandscapeDrawableStyleB;
     private final LandscapeBatteryDrawableStyleB mLandscapeDrawableStyleB;
+    private final LandscapeBatteryDrawableiOS15 mLandscapeDrawableiOS15;
+    private final LandscapeBatteryDrawableiOS16 mLandscapeDrawableiOS16;
     private final String mSlotBattery;
     private final ImageView mBatteryIconView;
     private final CurrentUserTracker mUserTracker;
@@ -171,6 +177,8 @@ public class BatteryMeterView extends LinearLayout implements
         mLandscapeDrawableStyleA = new LandscapeBatteryDrawableStyleA(context, frameColor);
         mRLandscapeDrawableStyleB = new RLandscapeBatteryDrawableStyleB(context, frameColor);
         mLandscapeDrawableStyleB = new LandscapeBatteryDrawableStyleB(context, frameColor);
+        mLandscapeDrawableiOS15 = new LandscapeBatteryDrawableiOS15(context, frameColor);
+        mLandscapeDrawableiOS16 = new LandscapeBatteryDrawableiOS16(context, frameColor);
         mCircleDrawable = new CircleBatteryDrawable(context, frameColor);
         mFullCircleDrawable = new FullCircleBatteryDrawable(context, frameColor);
         atts.recycle();
@@ -356,6 +364,8 @@ public class BatteryMeterView extends LinearLayout implements
             mLandscapeDrawableStyleA.setBatteryLevel(mLevel);
             mRLandscapeDrawableStyleB.setBatteryLevel(mLevel);
             mLandscapeDrawableStyleB.setBatteryLevel(mLevel);
+            mLandscapeDrawableiOS15.setBatteryLevel(mLevel);
+            mLandscapeDrawableiOS16.setBatteryLevel(mLevel);
             mCircleDrawable.setBatteryLevel(mLevel);
             mFullCircleDrawable.setBatteryLevel(mLevel);
         }
@@ -368,6 +378,8 @@ public class BatteryMeterView extends LinearLayout implements
             mLandscapeDrawableStyleA.setCharging(mCharging);
             mRLandscapeDrawableStyleB.setCharging(mCharging);
             mLandscapeDrawableStyleB.setCharging(mCharging);
+            mLandscapeDrawableiOS15.setCharging(mCharging);
+            mLandscapeDrawableiOS16.setCharging(mCharging);
             mCircleDrawable.setCharging(mCharging);
             mFullCircleDrawable.setCharging(mCharging);
             updateShowPercent();
@@ -385,6 +397,8 @@ public class BatteryMeterView extends LinearLayout implements
         mLandscapeDrawableStyleA.setPowerSaveEnabled(isPowerSave);
         mRLandscapeDrawableStyleB.setPowerSaveEnabled(isPowerSave);
         mLandscapeDrawableStyleB.setPowerSaveEnabled(isPowerSave);
+        mLandscapeDrawableiOS15.setPowerSaveEnabled(isPowerSave);
+        mLandscapeDrawableiOS16.setPowerSaveEnabled(isPowerSave);
         mCircleDrawable.setPowerSaveEnabled(isPowerSave);
         mFullCircleDrawable.setPowerSaveEnabled(isPowerSave);
         updateShowPercent();
@@ -468,6 +482,8 @@ public class BatteryMeterView extends LinearLayout implements
             mLandscapeDrawableStyleA.setShowPercent(false);
             mRLandscapeDrawableStyleB.setShowPercent(false);
             mLandscapeDrawableStyleB.setShowPercent(false);
+            mLandscapeDrawableiOS15.setShowPercent(false);
+            mLandscapeDrawableiOS16.setShowPercent(false);
             mCircleDrawable.setShowPercent(false);
             mFullCircleDrawable.setShowPercent(false);
             if (!showing) {
@@ -497,6 +513,8 @@ public class BatteryMeterView extends LinearLayout implements
             mLandscapeDrawableStyleA.setShowPercent(drawPercentInside);
             mRLandscapeDrawableStyleB.setShowPercent(drawPercentInside);
             mLandscapeDrawableStyleB.setShowPercent(drawPercentInside);
+            mLandscapeDrawableiOS15.setShowPercent(drawPercentInside);
+            mLandscapeDrawableiOS16.setShowPercent(drawPercentInside);
             mCircleDrawable.setShowPercent(drawPercentInside);
             mFullCircleDrawable.setShowPercent(drawPercentInside);
         }
@@ -569,9 +587,15 @@ public class BatteryMeterView extends LinearLayout implements
             batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_default);
             batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_default);
         } else if (mBatteryStyle == BATTERY_STYLE_RLANDSCAPE_STYLE_A || mBatteryStyle == BATTERY_STYLE_LANDSCAPE_STYLE_A
-                    || mBatteryStyle == BATTERY_STYLE_RLANDSCAPE_STYLE_B ||mBatteryStyle == BATTERY_STYLE_LANDSCAPE_STYLE_B) {
+                    || mBatteryStyle == BATTERY_STYLE_RLANDSCAPE_STYLE_B || mBatteryStyle == BATTERY_STYLE_LANDSCAPE_STYLE_B) {
             batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_style_a_b);
             batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_style_a_b);
+        } else if (mBatteryStyle == BATTERY_STYLE_LANDSCAPE_iOS_15) {
+            batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_ios_15);
+            batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_ios_15);
+        } else if (mBatteryStyle == BATTERY_STYLE_LANDSCAPE_iOS_16) {
+            batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_ios_16);
+            batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_ios_16);
         } else if (mBatteryStyle == BATTERY_STYLE_CIRCLE || mBatteryStyle == BATTERY_STYLE_DOTTED_CIRCLE
                     || mBatteryStyle == BATTERY_STYLE_FULL_CIRCLE){
             batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_circle_width);
@@ -619,6 +643,12 @@ public class BatteryMeterView extends LinearLayout implements
             case BATTERY_STYLE_LANDSCAPE_STYLE_B:
             mBatteryIconView.setImageDrawable(mLandscapeDrawableStyleB);
             break;
+            case BATTERY_STYLE_LANDSCAPE_iOS_15:
+            mBatteryIconView.setImageDrawable(mLandscapeDrawableiOS15);
+            break;
+            case BATTERY_STYLE_LANDSCAPE_iOS_16:
+            mBatteryIconView.setImageDrawable(mLandscapeDrawableiOS16);
+            break;
             case BATTERY_STYLE_FULL_CIRCLE:
             mBatteryIconView.setImageDrawable(mFullCircleDrawable);
             break;
@@ -650,6 +680,8 @@ public class BatteryMeterView extends LinearLayout implements
         mLandscapeDrawableStyleA.setColors(foregroundColor, backgroundColor, singleToneColor);
         mRLandscapeDrawableStyleB.setColors(foregroundColor, backgroundColor, singleToneColor);
         mLandscapeDrawableStyleB.setColors(foregroundColor, backgroundColor, singleToneColor);
+        mLandscapeDrawableiOS15.setColors(foregroundColor, backgroundColor, singleToneColor);
+        mLandscapeDrawableiOS16.setColors(foregroundColor, backgroundColor, singleToneColor);
         mCircleDrawable.setColors(foregroundColor, backgroundColor, singleToneColor);
         mFullCircleDrawable.setColors(foregroundColor, backgroundColor, singleToneColor);
         mTextColor = singleToneColor;

@@ -152,4 +152,8 @@
     <dimen name="status_bar_battery_icon_width_landscape_default">24dp</dimen>
     <dimen name="status_bar_battery_icon_height_landscape_style_a_b">12dp</dimen>
     <dimen name="status_bar_battery_icon_width_landscape_style_a_b">23dp</dimen>
+    <dimen name="status_bar_battery_icon_height_landscape_ios_16">14.0dp</dimen>
+    <dimen name="status_bar_battery_icon_width_landscape_ios_16">30.0dp</dimen>
+    <dimen name="status_bar_battery_icon_height_landscape_ios_15">32.0dp</dimen>
+    <dimen name="status_bar_battery_icon_width_landscape_ios_15">32.0dp</dimen>
 </resources>
