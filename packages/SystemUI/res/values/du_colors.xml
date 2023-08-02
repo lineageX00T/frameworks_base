@@ -49,4 +49,18 @@
     <color name="brightness_slider_background">#f2f2f2</color>
     <color name="brightness_slider_icons">@android:color/black</color>
     <color name="brightness_slider_progress">?android:attr/colorAccent</color>
+    
+    <!-- New color style -->
+    <color name="colorAccent">?android:attr/colorAccent</color>
+    <color name="colorAccentVariant">#ff47239a</color>
+    <color name="rippleAccent">#ffad8365</color>
+    <color name="rippleDark">#1A000000</color>
+    <color name="rippleDarker">#33000000</color>
+    <color name="holo_blue_light">#ff99a9db</color>
+    <color name="holo_green_light">#ffa0e2aa</color>
+    <color name="colorBackground">#4f884242</color>
+    <color name="colorContainer">#ecd130c4</color>
+    <color name="shadow">#14000000</color>
+    <color name="neumorph_outline_start">#FFBDBDBD</color>
+    <color name="neumorph_outline_end">#FFF0F0F0</color>
 </resources>

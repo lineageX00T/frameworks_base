@@ -84,11 +84,12 @@
 
                         <com.android.systemui.statusbar.policy.Clock
                             android:textAppearance="@style/TextAppearance.StatusBar.Clock"
-                            android:gravity="center|start"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="start|center_vertical"
                             android:id="@id/clock"
                             android:visibility="gone"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:singleLine="true" />
 
                         <com.android.systemui.du.carrierlabel.CarrierLabel
@@ -105,11 +106,12 @@
 
                         <com.android.systemui.statusbar.policy.ClockRight
                             android:textAppearance="@style/TextAppearance.StatusBar.Clock"
-                            android:gravity="center|start"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="end|center_vertical"
                             android:id="@id/right_clock"
                             android:visibility="gone"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:paddingStart="@dimen/status_bar_right_clock_starting_padding"
                             android:paddingEnd="@dimen/status_bar_clock_end_padding" />
@@ -120,7 +122,7 @@
                             android:id="@id/center_clock"
                             android:visibility="gone"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:singleLine="true" />
 
                         <android.widget.Space

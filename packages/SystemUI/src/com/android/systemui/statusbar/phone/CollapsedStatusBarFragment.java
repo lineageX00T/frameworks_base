@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageSwitcher;
 import android.widget.LinearLayout;
+import com.android.systemui.tuner.TunerService;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
@@ -59,7 +60,10 @@ import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
  * updated by the StatusBarIconController and DarkIconManager while it is attached.
  */
 public class CollapsedStatusBarFragment extends Fragment implements CommandQueue.Callbacks,
-        StatusBarStateController.StateListener {
+        StatusBarStateController.StateListener , TunerService.Tunable {
+
+    private static final String STATUSBAR_CLOCK_CHIP =
+            "system:" + Settings.System.STATUSBAR_CLOCK_CHIP;
 
     public static final String TAG = "CollapsedStatusBarFragment";
     private static final String EXTRA_PANEL_STATE = "panel_state";
@@ -72,7 +76,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
     private LinearLayout mCustomIconArea;
-    private View mClockView;
     private int mClockStyle;
     private View mDULogoRight;
     private View mNotificationIconAreaInner;
@@ -83,10 +86,15 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private View mOperatorNameFrame;
     private CommandQueue mCommandQueue;
     private LinearLayout mCenterClockLayout;
+    
+    private View mClockView;
+    private View mCenterClockView;
     private View mRightClock;
+        
     private boolean mShowClock = true;
     private final Handler mHandler = new Handler();
     private ContentResolver mContentResolver;
+    private int mShowSBClockBg;
 
     // custom carrier label
     private View mCustomCarrierLabel;
@@ -190,9 +198,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mStatusIcons.setPadding(mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(), (batteryStyle == 5/*hidden*/ ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
         mBatteryMeterView = mStatusBar.findViewById(R.id.battery);
         mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
-        mClockView = mStatusBar.findViewById(R.id.clock);
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+        mClockView = mStatusBar.findViewById(R.id.clock);
         mRightClock = mStatusBar.findViewById(R.id.right_clock);
+        mCenterClockView = mStatusBar.findViewById(R.id.center_clock);
         mBatteryBars[0] = mStatusBar.findViewById(R.id.battery_bar);
         mBatteryBars[1] = mStatusBar.findViewById(R.id.battery_bar_1);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
@@ -218,6 +227,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         super.onResume();
         mCommandQueue.addCallback(this);
         mStatusBarStateController.addCallback(this);
+        Dependency.get(TunerService.class).addTunable(this, STATUSBAR_CLOCK_CHIP);
     }
 
     @Override
@@ -231,11 +241,48 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void onDestroyView() {
         super.onDestroyView();
         Dependency.get(StatusBarIconController.class).removeIconGroup(mDarkIconManager);
+        Dependency.get(TunerService.class).removeTunable(this);
         if (mNetworkController.hasEmergencyCryptKeeperText()) {
             mNetworkController.removeCallback(mSignalCallback);
         }
         if (mBatteryMeterView != null) {
             mBatteryMeterView.removeCallback(mBatteryMeterViewCallback);
+        }
+    }
+    
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUSBAR_CLOCK_CHIP:
+                mShowSBClockBg = 
+                        TunerService.parseInteger(newValue, 0);
+                updateStatusBarClock();
+                break;
+            default:
+                break;
+         }
+    }
+
+    private void updateStatusBarClock() {
+        if (mShowSBClockBg != 0) {
+            String chipStyleUri = "sb_date_bg" + String.valueOf(mShowSBClockBg);
+            int resId = getContext().getResources().getIdentifier(chipStyleUri, "drawable", "com.android.systemui");
+            mClockView.setBackgroundResource(resId);
+            mClockView.setPadding(12,2,12,4);
+            mCenterClockView.setBackgroundResource(resId);
+            mCenterClockView.setPadding(12,2,12,4);
+            mRightClock.setBackgroundResource(resId);
+            mRightClock.setPadding(12,2,12,4);
+        } else {
+            mClockView.setBackgroundResource(0);
+            mClockView.setPaddingRelative(10,0,10,0);
+            mCenterClockView.setBackgroundResource(0);
+            mCenterClockView.setPaddingRelative(10,0,10,0);
+            mRightClock.setBackgroundResource(0);
+            mRightClock.setPaddingRelative(10,0,10,0);
+            mClockView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            mCenterClockView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            mRightClock.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         }
     }
 
