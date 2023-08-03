@@ -156,4 +156,6 @@
     <dimen name="status_bar_battery_icon_width_landscape_ios_16">30.0dp</dimen>
     <dimen name="status_bar_battery_icon_height_landscape_ios_15">32.0dp</dimen>
     <dimen name="status_bar_battery_icon_width_landscape_ios_15">32.0dp</dimen>
+    <dimen name="status_bar_battery_icon_width_height_coloros">25.0dp</dimen>
+    <dimen name="status_bar_battery_icon_width_height_miuipill">30.0dp</dimen>
 </resources>
