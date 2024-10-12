@@ -36,7 +36,7 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixel8a;
 
     private static final Map<String, Object> propsToChangePixel6;
-    private static final String[] packagesToChangePixel5 = {
+    private static final String[] packagesToChangePixel6 = {
         "com.google.android.tts",
         "com.google.android.googlequicksearchbox",
         "com.google.android.apps.recorder"
