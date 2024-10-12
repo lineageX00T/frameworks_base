@@ -207,7 +207,7 @@ public class PixelPropsUtils {
             Map<String, Object> propsToChange = propsToChangePixel8a;
 
             if (Arrays.asList(packagesToChangePixel6).contains(packageName)) {
-                propsToChange = packagesToChangePixel6;
+                propsToChange = propsToChangePixel6;
             }
 
             if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
