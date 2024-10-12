@@ -70,10 +70,10 @@ public final class AttestationHooks {
 
     private static void spoofBuildGms() {
         // Alter model name and fingerprint to avoid hardware attestation enforcement
-        setBuildField("DEVICE", "sailfish");
-        setBuildField("FINGERPRINT", "google/sailfish/sailfish:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-        setBuildField("MODEL", "Pixel");
-        setBuildField("PRODUCT", "sailfish");
+        setBuildField("DEVICE", "oriole");
+        setBuildField("FINGERPRINT", "google/oriole_beta/oriole:15/AP41.240823.009/12329489:user/release-keys");
+        setBuildField("MODEL", "Pixel 6");
+        setBuildField("PRODUCT", "oriole_beta");
         setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N);
     }
 
