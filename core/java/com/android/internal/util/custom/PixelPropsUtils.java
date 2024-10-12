@@ -33,9 +33,9 @@ public class PixelPropsUtils {
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
 
-    private static final Map<String, Object> propsToChangePixel7Pro;
+    private static final Map<String, Object> propsToChangePixel8a;
 
-    private static final Map<String, Object> propsToChangePixel5;
+    private static final Map<String, Object> propsToChangePixel6;
     private static final String[] packagesToChangePixel5 = {
         "com.google.android.tts",
         "com.google.android.googlequicksearchbox",
