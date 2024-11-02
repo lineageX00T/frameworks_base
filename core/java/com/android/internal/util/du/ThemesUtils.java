@@ -161,4 +161,16 @@ public class ThemesUtils {
             "com.gnonymous.gvisualmod.urm_m", // 2
             "com.gnonymous.gvisualmod.urm_l", // 3
     };
+
+    public static final String[] NETWORK_ICONS = {
+           "com.custom.overlay.android.aurora",
+           "com.custom.overlay.android.forlorn",
+           "com.custom.overlay.android.jollow",
+           "com.custom.overlay.android.ios",
+           "com.custom.overlay.android.plummy",
+           "com.custom.overlay.android.sneaky",
+           "com.custom.overlay.android.stroke",
+           "com.custom.overlay.android.xperia",
+           "com.custom.overlay.android.zigzag",
+    };
 }
