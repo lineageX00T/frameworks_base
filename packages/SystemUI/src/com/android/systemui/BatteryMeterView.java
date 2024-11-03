@@ -323,7 +323,7 @@ public class BatteryMeterView extends LinearLayout implements
 
     private void updateSbBatteryStyle() {
         mBatteryStyle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_BATTERY_STYLE, BATTERY_STYLE_LANDSCAPE);
+                Settings.System.STATUS_BAR_BATTERY_STYLE, BATTERY_STYLE_PORTRAIT);
         updateBatteryStyle();
         updateVisibility();
         for (int i = 0; i < mCallbacks.size(); i++) {
