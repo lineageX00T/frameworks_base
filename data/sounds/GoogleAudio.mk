@@ -33,6 +33,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/google/notifications/End_note.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/End_note.ogg \
     $(LOCAL_PATH)/google/notifications/Gentle_gong.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/Gentle_gong.ogg \
     $(LOCAL_PATH)/google/notifications/Mallet.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/Mallet.ogg \
+    $(LOCAL_PATH)/google/notifications/no-pro.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/no-pro.ogg \
     $(LOCAL_PATH)/google/notifications/Orders_up.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/Orders_up.ogg \
     $(LOCAL_PATH)/google/notifications/Ping.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/Ping.ogg \
     $(LOCAL_PATH)/google/notifications/Pipes.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/notifications/Pipes.ogg \
@@ -51,6 +52,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/google/ringtones/Lost_and_found.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/Lost_and_found.ogg \
     $(LOCAL_PATH)/google/ringtones/Mash_up.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/Mash_up.ogg \
     $(LOCAL_PATH)/google/ringtones/Monkey_around.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/Monkey_around.ogg \
+    $(LOCAL_PATH)/google/ringtones/NewSongette.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/NewSongette.ogg \
     $(LOCAL_PATH)/google/ringtones/Schools_out.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/Schools_out.ogg \
     $(LOCAL_PATH)/google/ringtones/The_big_adventure.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/The_big_adventure.ogg \
     $(LOCAL_PATH)/google/ringtones/Zen_too.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ringtones/Zen_too.ogg \
