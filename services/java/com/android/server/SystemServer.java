@@ -1892,9 +1892,9 @@ public final class SystemServer {
                 traceEnd();
 
             // AttestationService
-            t.traceBegin("AttestationService");
+            traceBeginAndSlog("AttestationService");
             mSystemServiceManager.startService(AttestationService.class);
-            t.traceEnd();
+            traceEnd();
             }
 
         if (!isWatch) {
