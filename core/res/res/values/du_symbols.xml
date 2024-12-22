@@ -319,4 +319,6 @@
   <!-- Whether device supports variable refresh rate -->
   <java-symbol type="bool" name="config_hasVariableRefreshRate" />
 
+  <!-- Build properties from a GMS certified device against current platform SPL level -->
+  <java-symbol type="array" name="config_certifiedBuildProperties" />
 </resources>

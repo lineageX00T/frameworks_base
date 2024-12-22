@@ -92,6 +92,7 @@ import com.android.server.clipboard.ClipboardService;
 import com.android.server.connectivity.IpConnectivityMetrics;
 import com.android.server.contentcapture.ContentCaptureManagerInternal;
 import com.android.server.coverage.CoverageService;
+import com.android.server.crdroid.AttestationService;
 import com.android.server.devicepolicy.DevicePolicyManagerService;
 import com.android.server.display.DcDimmingService;
 import com.android.server.display.DisplayManagerService;
@@ -1889,6 +1890,11 @@ public final class SystemServer {
                 traceBeginAndSlog("StartPocketBridgeService");
                 mSystemServiceManager.startService(PocketBridgeService.class);
                 traceEnd();
+
+            // AttestationService
+            t.traceBegin("AttestationService");
+            mSystemServiceManager.startService(AttestationService.class);
+            t.traceEnd();
             }
 
         if (!isWatch) {

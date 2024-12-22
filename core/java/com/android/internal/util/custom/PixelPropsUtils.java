@@ -21,14 +21,26 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.internal.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +50,8 @@ public final class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final String DEVICE = "ro.product.device";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final String DATA_FILE = "gms_certified_props.json";
 
     private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String SPOOF_PIXEL_GAMES = "persist.sys.pixelprops.games";
@@ -57,24 +70,7 @@ public final class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeMI13P;
     private static final Map<String, Object> propsToChangeF5;
     private static final Map<String, Object> propsToChangeBS4;
-
-    private static final String[] pTensorCodenames = {
-            "comet",
-            "komodo",
-            "caiman",
-            "tokay",
-            "akita",
-            "husky",
-            "shiba",
-            "felix",
-            "tangorpro",
-            "lynx",
-            "cheetah",
-            "panther",
-            "bluejay",
-            "oriole",
-            "raven"
-    };
+    private static final Map<String, Object> propsToChangeK70;
 
     // Packages to Spoof as the most recent Pixel device
     private static final String[] packagesToChangeRecentPixel = {
@@ -122,18 +118,12 @@ public final class PixelPropsUtils {
     // Packages to Spoof as OnePlus 8 Pro
     private static final String[] packagesToChangeOP8P = {
             "com.netease.lztgglobal",
-            "com.pubg.imobile",
-            "com.pubg.krmobile",
-            "com.rekoo.pubgm",
             "com.riotgames.league.wildrift",
             "com.riotgames.league.wildrifttw",
             "com.riotgames.league.wildriftvn",
             "com.riotgames.league.teamfighttactics",
             "com.riotgames.league.teamfighttacticstw",
-            "com.riotgames.league.teamfighttacticsvn",
-            "com.tencent.ig",
-            "com.tencent.tmgp.pubgmhd",
-            "com.vng.pubgmobile"
+            "com.riotgames.league.teamfighttacticsvn"
     };
 
     // Packages to Spoof as OnePlus 9 Pro
@@ -169,7 +159,18 @@ public final class PixelPropsUtils {
             "com.proximabeta.mf.uamo"
     };
 
+    // Packages to Spoof as Redmi K70
+    private static final String[] packagesToChangeK70 = {
+            "com.pubg.imobile",
+            "com.pubg.krmobile",
+            "com.rekoo.pubgm",
+            "com.tencent.ig",
+            "com.tencent.tmgp.pubgmhd",
+            "com.vng.pubgmobile"
+    };
+
     private static volatile boolean sIsFinsky = false;
+    private static volatile List<String> sCertifiedProps = new ArrayList<>();
 
     static {
         propsToChangeGeneric = new HashMap<>();
@@ -183,7 +184,7 @@ public final class PixelPropsUtils {
         propsToChangePixel9ProXL.put("HARDWARE", "komodo");
         propsToChangePixel9ProXL.put("MODEL", "Pixel 9 Pro XL");
         propsToChangePixel9ProXL.put("ID", "AP3A.241105.008");
-        propsToChangePixel9ProXL.put("FINGERPRINT", "google/komodo/komodo:15/AP3A.241105.008/12485168:user/release-keys");
+        propsToChangePixel9ProXL.put("FINGERPRINT", "google/komodo/komodo:15/AP4A.241205.013/12621605:user/release-keys");
         propsToChangePixelTablet = new HashMap<>();
         propsToChangePixelTablet.put("BRAND", "google");
         propsToChangePixelTablet.put("MANUFACTURER", "Google");
@@ -192,7 +193,7 @@ public final class PixelPropsUtils {
         propsToChangePixelTablet.put("HARDWARE", "tangorpro");
         propsToChangePixelTablet.put("MODEL", "Pixel Tablet");
         propsToChangePixelTablet.put("ID", "AP3A.241105.007");
-        propsToChangePixelTablet.put("FINGERPRINT", "google/tangorpro/tangorpro:15/AP3A.241105.007/12470370:user/release-keys");
+        propsToChangePixelTablet.put("FINGERPRINT", "google/tangorpro/tangorpro:15/AP4A.241205.013/12621605:user/release-keys");
         propsToChangePixelXL = new HashMap<>();
         propsToChangePixelXL.put("BRAND", "google");
         propsToChangePixelXL.put("MANUFACTURER", "Google");
@@ -229,6 +230,11 @@ public final class PixelPropsUtils {
         propsToChangeBS4 = new HashMap<>();
         propsToChangeBS4.put("MODEL", "2SM-X706B");
         propsToChangeBS4.put("MANUFACTURER", "blackshark");
+        propsToChangeK70 = new HashMap<>();
+        propsToChangeK70.put("BRAND", "Xiaomi");
+        propsToChangeK70.put("DEVICE", "manet");
+        propsToChangeK70.put("MANUFACTURER", "Xiaomi");
+        propsToChangeK70.put("MODEL", "23117RK66C");
     }
 
     public static void setProps(Context context) {
@@ -257,7 +263,7 @@ public final class PixelPropsUtils {
             } else if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName().toLowerCase();
                 if (processName.contains("unstable")) {
-                    spoofBuildGms();
+                    spoofBuildGms(context);
                     return;
                 }
                 return;
@@ -340,6 +346,13 @@ public final class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
+            } else if (Arrays.asList(packagesToChangeK70).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeK70.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }
             }
         }
     }
@@ -381,23 +394,61 @@ public final class PixelPropsUtils {
         }
     }
 
-    private static void spoofBuildGms() {
+    private static void spoofBuildGms(Context context) {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
+
+        File dataFile = new File(Environment.getDataSystemDirectory(), DATA_FILE);
+        String savedProps = readFromFile(dataFile);
+
+        if (TextUtils.isEmpty(savedProps)) {
+            Log.d(TAG, "Parsing props locally - data file unavailable");
+            sCertifiedProps = Arrays.asList(context.getResources().getStringArray(R.array.config_certifiedBuildProperties));
+        } else {
+            Log.d(TAG, "Parsing props fetched by attestation service");
+            try {
+                JSONObject parsedProps = new JSONObject(savedProps);
+                Iterator<String> keys = parsedProps.keys();
+
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    String value = parsedProps.getString(key);
+                    sCertifiedProps.add(key + ":" + value);
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "Error parsing JSON data", e);
+                Log.d(TAG, "Parsing props locally as fallback");
+                sCertifiedProps = Arrays.asList(context.getResources().getStringArray(R.array.config_certifiedBuildProperties));
+            }
+        }
+
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("MANUFACTURER", "Google");
-        setPropValue("MODEL", "Pixel 9 Pro XL");
-        setPropValue("FINGERPRINT", "google/komodo_beta/komodo:15/AP41.240925.009/12534705:user/release-keys");
-        setPropValue("BRAND", "google");
-        setPropValue("PRODUCT", "komodo_beta");
-        setPropValue("DEVICE", "komodo");
-        setPropValue("VERSION.RELEASE", "15");
-        setPropValue("ID", "AP41.240925.009");
-        setPropValue("VERSION.INCREMENTAL", "12534705");
-        setPropValue("TYPE", "user");
-        setPropValue("TAGS", "release-keys");
-        setPropValue("VERSION.SECURITY_PATCH", "2024-10-05");
-        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "32");
+        for (String entry : sCertifiedProps) {
+            // Each entry must be of the format FIELD:value
+            final String[] fieldAndProp = entry.split(":", 2);
+            if (fieldAndProp.length != 2) {
+                Log.e(TAG, "Invalid entry in certified props: " + entry);
+                continue;
+            }
+            setPropValue(fieldAndProp[0], fieldAndProp[1]);
+        }
+    }
+
+    private static String readFromFile(File file) {
+        StringBuilder content = new StringBuilder();
+
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    content.append(line);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error reading from file", e);
+            }
+        }
+        return content.toString();
     }
 
     private static boolean isCallerSafetyNet() {
